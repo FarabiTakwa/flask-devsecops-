@@ -1,0 +1,41 @@
+name: CI/CD Pipeline - Flask DevSecOps
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -t flask-devsecops-app .
+
+      - name: Vérifier Docker images
+        run: docker images
+
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'flask-devsecops-app:latest'
+          format: 'table'
+          exit-code: '0'
+
+      - name: Login to DockerHub
+        if: ${{ secrets.DOCKER_USERNAME && secrets.DOCKER_PASSWORD }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push image to DockerHub
+        if: ${{ secrets.DOCKER_USERNAME && secrets.DOCKER_PASSWORD }}
+        run: |
+          docker tag flask-devsecops-app ${{ secrets.DOCKER_USERNAME }}/flask-devsecops-app:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/flask-devsecops-app:latest

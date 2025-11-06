@@ -31,9 +31,9 @@ jobs:
       uses: docker/login-action@v3
       with:
         username: ${{ secrets.docker_username }}
-        password: ${{ secrets.docker_poassword }}
+        password: ${{ secrets.docker_password }}
 
     - name: Push image to DockerHub
       run: |
         docker tag flask-devsecops-app ${{ secrets.docker_username }}/flask-devsecops-app:latest
-        docker push ${{ secrets.docker_paswword }}/flask-devsecops-app:latest
+        docker push ${{ secrets.docker_password }}/flask-devsecops-app:latest

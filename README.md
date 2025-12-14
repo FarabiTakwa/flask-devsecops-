@@ -12,7 +12,6 @@ Il montre la mise en place d’une intégration continue et d’un déploiement 
 - *Pipeline DevSecOps :*
   - Build de l’image Docker
   - Scan de l’image avec Trivy pour détecter les vulnérabilités
-  - (Optionnel) Push de l’image sur Docker Hub
   - Badge CI/CD pour indiquer le succès du build
 ## Objectif du projet
 
